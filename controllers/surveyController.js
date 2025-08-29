@@ -95,6 +95,7 @@ export const intakeSurvey = async (req, res) => {
   console.log("Endpoint /api/surveys/intake hit successfully!");
   const headers = req.headers;
   const body = req.body || {};
+  const rawBody = req.rawBody ? req.rawBody.toString() : JSON.stringify(body);
 
   console.log("-> Incoming survey");
   console.log("Headers:", headers);
@@ -110,7 +111,7 @@ export const intakeSurvey = async (req, res) => {
 
   const expected = crypto
     .createHmac("sha256", secret)
-    .update(JSON.stringify(body))
+    .update(rawBody)
     .digest("hex");
 
   if (expected !== incomingSig) {
